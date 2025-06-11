@@ -1,0 +1,6 @@
+resource_group_name      = "khushi-function-rg-03"
+location                 = "West Europe"
+storage_account_name     = "khushistorageaccount3"
+service_plan_name        = "khushi-function-plan-03"
+function_app_name        = "khushi-function-03"
+application_insight_name = "khushi-appinsight-03"
