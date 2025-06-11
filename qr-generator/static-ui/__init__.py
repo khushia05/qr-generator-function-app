@@ -1,8 +1,13 @@
+import os
+
 def main(req):
-    with open("static-ui/index.html", "r") as f:
-        html_content = f.read()
+    index_path = os.path.join(os.path.dirname(__file__), "index.html")
+    with open(index_path, "r") as f:
+        html = f.read()
     return {
         "statusCode": 200,
-        "headers": {"Content-Type": "text/html"},
-        "body": html_content
+        "headers": {
+            "Content-Type": "text/html"
+        },
+        "body": html
     }
