@@ -18,7 +18,7 @@ jobs:
         python-version: '3.12'
 
     - name: 📁 Change to function app directory
-      run: cd app
+      run: cd qr-generator
 
     - name: 🧪 Install dependencies
       run: |
@@ -28,6 +28,6 @@ jobs:
     - name: 🚀 Deploy to Azure Function App
       uses: Azure/functions-action@v1
       with:
-        app-name: func-app-khushi1
+        app-name: khushi-function-03
         publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
-        package: app
+        package: qr-generator
