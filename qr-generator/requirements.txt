@@ -1,3 +1,4 @@
 azure-functions
 qrcode
 Pillow
+azure-storage-blob

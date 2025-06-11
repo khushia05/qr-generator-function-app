@@ -2,7 +2,9 @@ import logging
 import azure.functions as func
 import qrcode
 import io
-import base64
+import os
+from azure.storage.blob import BlobServiceClient, ContentSettings
+from datetime import datetime
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('QR Function triggered.')
@@ -11,13 +13,46 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     if not data:
         return func.HttpResponse("Please pass 'data' query string", status_code=400)
 
+    # Generate QR code image
     img = qrcode.make(data)
     buf = io.BytesIO()
     img.save(buf, format="PNG")
-    img_bytes = buf.getvalue()
-    base64_img = base64.b64encode(img_bytes).decode('utf-8')
+    buf.seek(0)
 
-    return func.HttpResponse(
-        f'<img src="data:image/png;base64,{base64_img}"/>',
-        mimetype="text/html"
-    )
+    # Define blob name using timestamp
+    timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
+    blob_name = f"qr_{timestamp}.png"
+
+    try:
+        # Get connection string and container name from environment variables
+        conn_str = os.environ["AzureWebJobsStorage"]
+        container_name = os.environ.get("QR_CONTAINER_NAME", "qr-codes")
+
+        # Upload to Azure Blob Storage
+        blob_service_client = BlobServiceClient.from_connection_string(conn_str)
+        container_client = blob_service_client.get_container_client(container_name)
+
+        # Create container if it doesn't exist
+        if not container_client.exists():
+            container_client.create_container()
+
+        # Upload image
+        blob_client = container_client.get_blob_client(blob_name)
+        blob_client.upload_blob(
+            buf,
+            blob_type="BlockBlob",
+            overwrite=True,
+            content_settings=ContentSettings(content_type='image/png')
+        )
+
+        # Create blob URL
+        blob_url = blob_client.url
+
+        return func.HttpResponse(
+            f"QR code image uploaded successfully!<br><a href='{blob_url}' target='_blank'>Download QR</a>",
+            mimetype="text/html"
+        )
+
+    except Exception as e:
+        logging.error(f"Upload failed: {str(e)}")
+        return func.HttpResponse(f"Error: {str(e)}", status_code=500)
