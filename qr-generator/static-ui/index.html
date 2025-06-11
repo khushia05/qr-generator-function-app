@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>QR Code Generator</title>
+</head>
+<body>
+  <h2>QR Code Generator</h2>
+  <input id="textInput" type="text" placeholder="Enter text for QR">
+  <button onclick="generateQR()">Generate</button>
+  <div id="result"></div>
+
+  <script>
+    async function generateQR() {
+      const value = document.getElementById("textInput").value;
+      if (!value) {
+        alert("Please enter text.");
+        return;
+      }
+
+      const response = await fetch(`/api/backend-api?data=${encodeURIComponent(value)}`);
+      const html = await response.text();
+      document.getElementById("result").innerHTML = html;
+    }
+  </script>
+</body>
+</html>
