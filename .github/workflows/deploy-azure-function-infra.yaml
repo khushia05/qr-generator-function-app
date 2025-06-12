@@ -17,6 +17,18 @@ jobs:
     runs-on: ubuntu-latest
     environment: dev 
 
+    env:
+      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      BACKEND_STORAGE_ACC: sakhushitfstate01
+      ENV: dev
+
+    defaults:
+      run:
+        working-directory: "./Infra"
+
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v3
@@ -26,31 +38,26 @@ jobs:
       with:
         terraform_version: 1.5.0
 
-    - name: Azure Login
-      uses: azure/login@v1
-      with:
-        creds: '{"clientId":"${{ secrets.AZURE_CLIENT_ID }}","clientSecret":"${{ secrets.AZURE_CLIENT_SECRET }}","tenantId":"${{ secrets.AZURE_TENANT_ID }}","subscriptionId":"${{ secrets.AZURE_SUBSCRIPTION_ID }}"}'
+    # - name: Azure Login
+    #   uses: azure/login@v1
+    #   with:
+    #     creds: '{"clientId":"${{ secrets.AZURE_CLIENT_ID }}","clientSecret":"${{ secrets.AZURE_CLIENT_SECRET }}","tenantId":"${{ secrets.AZURE_TENANT_ID }}","subscriptionId":"${{ secrets.AZURE_SUBSCRIPTION_ID }}"}'
 
     - name: Terraform Init
-      run: terraform init
-      working-directory: Infra
+      run: terraform init -backend-config "key=tfstate/qr-generator-proj/${{ env.ENV }}/terraform.tfstate" -backend-config="access_key=${{ secrets.TF_BackendConfig_Access_Key }}"
 
     - name: Terraform Format & Validate
       run: |
         terraform fmt
         terraform validate
-      working-directory: Infra
 
     - name: Terraform Plan
       run: terraform plan -var-file="dev.tfvars"
-      working-directory: Infra
 
     - name: Terraform Apply
       if: ${{ github.event.inputs.action == 'apply' }}
       run: terraform apply -var-file="dev.tfvars" -auto-approve
-      working-directory: Infra
 
     - name: Terraform Destroy
       if: ${{ github.event.inputs.action == 'destroy' }}
-      run: terraform destroy -var-file="dev.tfvars" -auto-approve
-      working-directory: Infra
+      run: terraform destroy -var-file="dev.tfvars" -auto-approv
