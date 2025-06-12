@@ -18,10 +18,9 @@ jobs:
         python-version: '3.12'
 
     - name: 🧪 Install dependencies
-      working-directory: qr-generator
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        pip install -r qr-generator/requirements.txt --target qr-generator/.python_packages/lib/site-packages
 
     - name: ✅ Archive Function App
       working-directory: qr-generator
