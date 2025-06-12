@@ -31,24 +31,26 @@ jobs:
       with:
         creds: '{"clientId":"${{ secrets.AZURE_CLIENT_ID }}","clientSecret":"${{ secrets.AZURE_CLIENT_SECRET }}","tenantId":"${{ secrets.AZURE_TENANT_ID }}","subscriptionId":"${{ secrets.AZURE_SUBSCRIPTION_ID }}"}'
 
-    - name: Change to Infra Directory
-      run: echo "::set-env name=GITHUB_WORKSPACE::$GITHUB_WORKSPACE/Infra"
-      
     - name: Terraform Init
       run: terraform init
+      working-directory: Infra
 
     - name: Terraform Format & Validate
       run: |
         terraform fmt
         terraform validate
+      working-directory: Infra
 
     - name: Terraform Plan
       run: terraform plan -var-file="dev.tfvars"
+      working-directory: Infra
 
     - name: Terraform Apply
       if: ${{ github.event.inputs.action == 'apply' }}
       run: terraform apply -var-file="dev.tfvars" -auto-approve
+      working-directory: Infra
 
     - name: Terraform Destroy
       if: ${{ github.event.inputs.action == 'destroy' }}
       run: terraform destroy -var-file="dev.tfvars" -auto-approve
+      working-directory: Infra
