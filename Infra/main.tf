@@ -24,6 +24,12 @@ resource "azurerm_storage_account" "storage" {
   account_replication_type = "LRS"
 }
 
+resource "azurerm_storage_container" "qrcode_container" {
+  name                  = var.container_name
+  storage_account_name  = azurerm_storage_account.storage.name
+  container_access_type = "blob"  # Allows anonymous read access
+}
+
 resource "azurerm_service_plan" "plan" {
   name                = var.service_plan_name
   resource_group_name = azurerm_resource_group.rg.name
