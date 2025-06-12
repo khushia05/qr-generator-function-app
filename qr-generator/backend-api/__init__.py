@@ -54,7 +54,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             <body style="text-align:center; font-family:Arial;">
                 <h2>QR Code Generated Successfully!</h2>
                 <a href="{blob_url}" target="_blank" download>📥 Download QR Code</a><br><br>
-                <img src="{blob_url}" alt="QR Code" style="width:200px; height:200px; margin-top:10px;" />
+                <img src="{blob_url}" alt="QR Code" style="width:400px; height:400px; margin-top:10px;" />
             </body>
         </html>
         """,
