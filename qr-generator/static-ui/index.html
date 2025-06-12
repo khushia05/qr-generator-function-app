@@ -4,77 +4,104 @@
   <meta charset="UTF-8">
   <title>QR Code Generator</title>
   <style>
-    body {
+    * {
       margin: 0;
       padding: 0;
-      font-family: Arial, sans-serif;
-      background: #f0f4f8;
+      box-sizing: border-box;
+    }
+
+    body {
+      height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      background: linear-gradient(135deg, #74ebd5, #9face6);
+      font-family: 'Segoe UI', sans-serif;
     }
 
     .container {
       background: white;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
       text-align: center;
-      width: 300px;
+      width: 90%;
+      max-width: 400px;
     }
 
     h2 {
       color: #333;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
     }
 
     input {
       width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      margin-bottom: 15px;
+      padding: 12px;
       font-size: 16px;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      transition: border-color 0.3s;
+    }
+
+    input:focus {
+      border-color: #7f5af0;
+      outline: none;
     }
 
     button {
-      background-color: #4CAF50;
+      width: 100%;
+      padding: 12px;
+      background-color: #7f5af0;
       color: white;
-      border: none;
-      padding: 10px 20px;
       font-size: 16px;
-      border-radius: 6px;
+      border: none;
+      border-radius: 8px;
       cursor: pointer;
       transition: background-color 0.3s;
     }
 
     button:hover {
-      background-color: #45a049;
+      background-color: #6842d7;
     }
 
     #result {
-      margin-top: 20px;
+      margin-top: 25px;
     }
 
-    img {
-      max-width: 100%;
+    #result img {
+      width: 200px;
+      height: 200px;
+      object-fit: contain;
+      margin-top: 10px;
+    }
+
+    .download-link {
+      display: block;
+      margin-top: 15px;
+      color: #1a73e8;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .download-link:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>QR Code Generator</h2>
-    <input id="textInput" type="text" placeholder="Enter text for QR">
-    <button onclick="generateQR()">Generate</button>
+    <h2>🎯 QR Code Generator</h2>
+    <input id="textInput" type="text" placeholder="Enter text or URL">
+    <button onclick="generateQR()">Generate QR Code</button>
     <div id="result"></div>
   </div>
 
   <script>
     async function generateQR() {
       const value = document.getElementById("textInput").value;
-      if (!value) {
-        alert("Please enter text.");
+      if (!value.trim()) {
+        alert("❗ Please enter some text.");
         return;
       }
 
