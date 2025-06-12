@@ -1,4 +1,4 @@
-name: Terraform Deployment
+name: Deploy Azure Infra for QR Fucntion App Project
 
 on:
   workflow_dispatch:
