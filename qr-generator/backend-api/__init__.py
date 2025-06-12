@@ -47,10 +47,18 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
         # Create blob URL
         blob_url = blob_client.url
-
+    
         return func.HttpResponse(
-            f"QR code image uploaded successfully!<br><a href='{blob_url}' target='_blank'>Download QR</a>",
-            mimetype="text/html"
+        f"""
+        <html>
+            <body style="text-align:center; font-family:Arial;">
+                <h2>QR Code Generated Successfully!</h2>
+                <a href="{blob_url}" target="_blank" download>📥 Download QR Code</a><br><br>
+                <img src="{blob_url}" alt="QR Code" style="width:200px; height:200px; margin-top:10px;" />
+            </body>
+        </html>
+        """,
+        mimetype="text/html" 
         )
 
     except Exception as e:
