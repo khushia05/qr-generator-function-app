@@ -17,17 +17,16 @@ jobs:
       with:
         python-version: '3.12'
 
-    - name: 📁 Change to function app directory
-      run: cd qr-generator
-
     - name: 🧪 Install dependencies
+      working-directory: qr-generator
       run: |
         python -m pip install --upgrade pip
-        pip install -r qr-generator/requirements.txt
+        pip install -r requirements.txt
 
     - name: ✅ Archive Function App
+      working-directory: qr-generator
       run: |
-        zip -r qr-generator.zip . -x '*.git*'
+        zip -r ../qr-generator.zip . -x '*.git*'
 
     - name: 🚀 Deploy to Azure Function App
       uses: Azure/functions-action@v1
