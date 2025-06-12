@@ -2,6 +2,15 @@ name: Terraform Deployment
 
 on:
   workflow_dispatch:
+    inputs:
+      action:
+        description: "Select Action (apply or destroy)"
+        required: true
+        default: "apply"
+        type: choice
+        options:
+          - apply
+          - destroy
 
 jobs:
   Infra-deployment-function-app:
@@ -21,6 +30,7 @@ jobs:
       uses: azure/login@v1
       with:
         client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
@@ -33,7 +43,12 @@ jobs:
         terraform validate
 
     - name: Terraform Plan
-      run: terraform plan -out=tfplan
+      run: terraform plan -var-file="dev.tfvars"
 
     - name: Terraform Apply
-      run: terraform apply -auto-approve
+      if: ${{ github.event.inputs.action == 'apply' }}
+      run: terraform apply -var-file="dev.tfvars" -auto-approve
+
+    - name: Terraform Destroy
+      if: ${{ github.event.inputs.action == 'destroy' }}
+      run: terraform destroy -var-file="dev.tfvars" -auto-approve
