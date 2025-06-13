@@ -2,7 +2,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = ">= 3.45.0"
+      version = "= 4.32.0"
     }
   }
 }
@@ -54,6 +54,7 @@ resource "azurerm_linux_function_app" "function" {
   service_plan_id            = azurerm_service_plan.plan.id
 
   site_config {
+    application_insights_connection_string = azurerm_application_insights.app_insights.connection_string
     application_stack {
       python_version = "3.12"
     }
@@ -64,10 +65,5 @@ resource "azurerm_linux_function_app" "function" {
     ]
     support_credentials = false
     }
-  }
-
-  app_settings = {
-    "APPLICATIONINSIGHTS_CONNECTION_STRING" = azurerm_application_insights.app_insights.connection_string
-    "WEBSITE_RUN_FROM_PACKAGE"       = "1"
   }
 }
