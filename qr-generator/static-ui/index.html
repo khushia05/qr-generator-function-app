@@ -21,17 +21,27 @@
 
     .container {
       background: white;
-      padding: 40px;
+      padding: 40px 30px;
       border-radius: 15px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-      text-align: center;
-      width: 90%;
-      max-width: 400px;
+      width: 95%;
+      max-width: 460px; /* increased from 400px */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     h2 {
       color: #333;
-      margin-bottom: 25px;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .description {
+      font-size: 14.5px;
+      color: #444;
+      margin-bottom: 20px;
+      text-align: center;
     }
 
     input {
@@ -67,17 +77,21 @@
 
     #result {
       margin-top: 25px;
+      text-align: center;
+      width: 100%;
     }
 
     #result img {
-      width: 200px;
-      height: 200px;
-      object-fit: contain;
+      width: 220px;
+      height: 220px;
       margin-top: 10px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .download-link {
-      display: block;
+      display: inline-block;
       margin-top: 15px;
       color: #1a73e8;
       text-decoration: none;
@@ -92,6 +106,9 @@
 <body>
   <div class="container">
     <h2>🎯 QR Code Generator</h2>
+    <p class="description">
+      Please provide any valid URL to generate it's QR code.
+    </p>
     <input id="textInput" type="text" placeholder="Enter text or URL">
     <button onclick="generateQR()">Generate QR Code</button>
     <div id="result"></div>
