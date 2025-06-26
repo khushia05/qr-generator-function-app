@@ -1,0 +1,7 @@
+resource_group_name      = "rg-khushi-qr-generator-qa-01"
+location                 = "West Europe"
+storage_account_name     = "sakhushiqrqafuncapp01"
+service_plan_name        = "as-plan-khushi-funcapp-qa-01"
+function_app_name        = "functionapp-khushi-qa-01"
+application_insight_name = "appinsight-khushi-qa-01"
+container_name           = "qr-codes"

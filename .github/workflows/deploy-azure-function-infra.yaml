@@ -14,7 +14,7 @@ on:
 
 jobs:
   Infra-deployment-function-app:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest # Agent VM where code gets build
     environment: dev 
 
     env:
@@ -31,7 +31,7 @@ jobs:
 
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v3 # git clone in Agent VM
 
     - name: Set Up Terraform
       uses: hashicorp/setup-terraform@v2
